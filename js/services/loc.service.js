@@ -6,8 +6,8 @@ export const locService = {
 var locs;
 
 function setLocs({ latitude, longitude }) {
-    locs = [{ lat: latitude, lng: longitude }]
-        // console.log('LOCS', locs);
+    locs = { lat: latitude, lng: longitude }
+    console.log('LOCS', locs);
 }
 
 function getLocs() {
@@ -17,7 +17,6 @@ function getLocs() {
         }, 2000)
     });
 }
-
 
 function getPosition() {
 

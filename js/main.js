@@ -4,17 +4,7 @@ import { locService } from './services/loc.service.js'
 import { mapService } from './services/map.service.js'
 
 
-locService.getLocs()
-    .then(locs => console.log('locs', locs))
-
 window.onload = () => {
-    mapService.initMap()
-        .then(() => {
-
-            mapService.addMarker({ lat: 32.0749831, lng: 34.9120554 });
-        })
-        .catch(console.log('INIT MAP ERROR'));
-
     locService.getPosition()
         .then(pos => {
             locService.setLocs(pos.coords)
@@ -23,9 +13,20 @@ window.onload = () => {
         .catch(err => {
             console.log('err!!!', err);
         })
+    locService.getLocs()
+        .then(locs => mapService.initMap(locs.lat, locs.lng))
+        .then(() => {
+            locService.getLocs()
+                .then(locs => mapService.addMarker(locs))
+                .then(marker => console.log('marker:', marker))
+        })
+        .catch(console.log('INIT MAP ERROR'));
+
 }
 
-document.querySelector('.btn').addEventListener('click', (ev) => {
+document.querySelector('.my-location').addEventListener('click', (ev) => {
     console.log('Aha!', ev.target);
-    mapService.panTo(35.6895, 139.6917);
+    mapService.panTo(locService.getLocs()
+        .then(locs => Promise.resolve(locs))
+    )
 })

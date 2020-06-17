@@ -4,12 +4,10 @@ export const mapService = {
     panTo
 }
 
-
 var map;
 
-
-function initMap(lat = 32.0749831, lng = 34.9120554) {
-    console.log('InitMap');
+function initMap(lat, lng) {
+    console.log('InitMap', lat, lng);
     return _connectGoogleApi()
         .then(() => {
             console.log('google available');
@@ -20,6 +18,7 @@ function initMap(lat = 32.0749831, lng = 34.9120554) {
                 })
             console.log('Map!', map);
         })
+
 }
 
 function addMarker(loc) {
@@ -31,9 +30,11 @@ function addMarker(loc) {
     return marker;
 }
 
-function panTo(lat, lng) {
-    var laLatLng = new google.maps.LatLng(lat, lng);
-    map.panTo(laLatLng);
+function panTo(prmLocs) {
+    prmLocs.then(({ lat, lng }) => {
+        var laLatLng = new google.maps.LatLng(lat, lng);
+        map.panTo(laLatLng);
+    })
 }
 
 function _connectGoogleApi() {
